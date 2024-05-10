@@ -1,0 +1,62 @@
+
+# Values in this file override the default values of our helm chart.
+#
+# See https://github.com/wunderio/charts/blob/master/drupal/values.yaml
+# for all possible options.
+
+projectName: next-drupal-starterkit
+
+php:
+  drupalCoreVersion: "10"
+  env:
+    DRUPAL_CLIENT_ID: <|DRUPAL_CLIENT_ID|>
+    DRUPAL_CLIENT_SECRET: ${DRUPAL_CLIENT_SECRET}
+    DRUPAL_REVALIDATE_SECRET: ${DRUPAL_REVALIDATE_SECRET}
+    WUNDER_NEXT_FRONTEND_URL: https://<|NEXT_DOMAIN|>
+  hashsalt: ${HASHSALT}
+
+  # This section is used in the template only, it will reinstall the site and apply
+  # all standard configuration at each commit. When creating a new project from this template
+  # you can remove this section.
+  postupgrade:
+    afterCommand: |
+      drush si minimal --account-pass=${DRUPAL_ADMIN_PWD} -y
+      drush cr
+      chmod +x /app/web/core/scripts/drupal
+      cd /app/web && php core/scripts/drupal recipe ../recipes/wunder_next_setup -vvv
+      drush cr
+      drush wunder_next:setup-user-and-consumer
+      drush state:set wunder_democontent.disable_revalidation TRUE
+      drush en wunder_democontent -y
+      drush eshd -y
+      drush eshs
+      drush mim --group=demo_content --execute-dependencies --skip-progress-bar
+      drush state:del wunder_democontent.disable_revalidation
+      drush cron
+
+# Configure reference data that will be used when creating new environments.
+referenceData:
+  enabled: false
+  # The name of the environment from which reference data will be copied.
+  referenceEnvironment: 'main'
+
+nginx:
+  basicauth:
+    enabled: false
+  content_security_policy: >-
+    upgrade-insecure-requests;
+    default-src https: data: 'unsafe-inline' 'unsafe-eval';
+    frame-ancestors 'self';
+    frame-src *.wdr.io;
+    base-uri 'self';
+    object-src 'self';
+    connect-src wss: https:
+
+elasticsearch:
+  enabled: true
+  image: europe-north1-docker.pkg.dev/silta-dev/images/next-drupal-starterkit-elasticsearch
+  imageTag: 'with-icu-analysis'
+  imagePullPolicy: Always
+  esConfig:
+    elasticsearch.yml: |
+      script.allowed_contexts: score

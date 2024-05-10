@@ -1,0 +1,35 @@
+# Values in this file override the default values of our helm chart.
+#
+# See https://github.com/wunderio/charts/blob/master/frontend/values.yaml
+# for all possible options.
+#
+#
+projectName: next-drupal-starterkit
+
+services:
+  node:
+    exposedRoute: '/'
+    port: 3000
+    env:
+      DRUPAL_CLIENT_ID: <|DRUPAL_CLIENT_ID|>
+      DRUPAL_CLIENT_SECRET: ${DRUPAL_CLIENT_SECRET}
+      DRUPAL_REVALIDATE_SECRET: ${DRUPAL_REVALIDATE_SECRET}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXT_PUBLIC_DRUPAL_BASE_URL: https://<|DRUPAL_DOMAIN|>
+      NEXT_PUBLIC_FRONTEND_URL: https://<|NEXT_DOMAIN|>
+      NEXT_IMAGE_DOMAIN: <|DRUPAL_DOMAIN|>
+      NEXTAUTH_URL: https://<|NEXT_DOMAIN|>
+
+nginx:
+  content_security_policy: >- # Lines below are joined without line breaks.
+    upgrade-insecure-requests;
+    default-src 'none';
+    script-src 'self' youtube.com https://www.youtube.com;
+    frame-src youtube.com https://www.youtube.com;
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: *.wdr.io https://i.ytimg.com;
+    font-src 'self' *.wdr.io;
+    frame-ancestors 'self' *.wdr.io;
+    base-uri 'self';
+    connect-src 'self';
+    form-action 'self';

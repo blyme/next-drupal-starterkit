@@ -1,0 +1,19 @@
+# Values in this file override the default values of our helm chart.
+#
+# See https://github.com/wunderio/charts/blob/master/frontend/values.yaml
+# for all possible options.
+#
+#
+exposeDomains:
+  main-site:
+    hostname: next-drupal-starterkit.dev.wdr.io
+
+services:
+  node:
+    env:
+      NEXT_PUBLIC_FRONTEND_URL: https://next-drupal-starterkit.dev.wdr.io
+      NEXTAUTH_URL: https://next-drupal-starterkit.dev.wdr.io
+
+nginx:
+  basicauth:
+    enabled: false

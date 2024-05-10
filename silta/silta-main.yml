@@ -1,0 +1,6 @@
+referenceData:
+  updateAfterDeployment: false
+
+php:
+  env:
+    WUNDER_NEXT_FRONTEND_URL: https://next-drupal-starterkit.dev.wdr.io

@@ -1,0 +1,21 @@
+uuid: a5fcc86f-03e6-4553-9b19-d80ac853cad5
+langcode: en
+status: true
+dependencies:
+  config:
+    - rest.resource.webform_rest_complete_submission
+    - rest.resource.webform_rest_submit
+  module:
+    - rest
+    - webform
+_core:
+  default_config_hash: PuY_dim2YD9Lz-_MokKp_UhLIVY1z_VOwA1w5upSfIA
+id: frontend_login
+label: 'Frontend login user'
+weight: 6
+is_admin: null
+permissions:
+  - 'restful get webform_rest_complete_submission'
+  - 'restful post webform_rest_submit'
+  - 'view own webform submission'
+

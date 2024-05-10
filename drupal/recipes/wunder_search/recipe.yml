@@ -1,0 +1,11 @@
+name: 'Wunder search'
+description: "Enable search integration with elasticsearch"
+type: 'Search'
+recipes:
+  - wunder_base
+install:
+  - elasticsearch_helper
+  - wunder_search
+config:
+  import:
+    elasticsearch_helper: '*'
